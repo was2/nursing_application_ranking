@@ -1,7 +1,7 @@
---CREATE OR REPLACE FORCE VIEW "MGCCOP"."V_NURSE_OPT_COURSES" ("PIDM", "SUBJ", "CNUM", "QPS", "HOURS", "GRADE", "SRC") AS 
+-- CREATE OR REPLACE FORCE VIEW "MGCCOP"."V_NURSE_OPT_COURSES" ("PIDM", "SUBJ", "CNUM", "QPS", "HOURS", "GRADE", "TERM", "SRC") AS 
 
 select all_courses.pidm, all_courses.subj, all_courses.cnum, all_courses.qps, 
-       all_courses.hours, all_courses.grade, all_courses.src
+       all_courses.hours, all_courses.grade, all_courses.term, all_courses.src
         
 from MGCCOP.v_nurse_all_courses all_courses,
      ( select pidm, subj, cnum, 

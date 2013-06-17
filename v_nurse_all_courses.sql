@@ -63,7 +63,7 @@ where
             or ( ( shrtckn_subj_code, shrtckn_crse_numb ) in
                  ( select subj, cnum from mgccop.nurse_eligible_courses
                                  where max_age is not null
-                                -- and add_months(stvterm_end_date, max_age) >= sysdate
+                                 --and add_months(stvterm_end_date, max_age) >= sysdate
                  )
                )
                
@@ -73,7 +73,8 @@ where
                     where ( subj_req, cnum_req ) in 
                           ( select subj, cnum from mgccop.nurse_eligible_courses
                                               where max_age is null ) )
-  
+                                              
+            -- these courses must not be older than max_age months
             or ( ( shrtckn_subj_code, shrtckn_crse_numb ) in
                   ( select subj_eqiv, cnum_eqiv 
                        from mgccop.v_nurse_course_eqiv
