@@ -1,4 +1,4 @@
---CREATE OR REPLACE FORCE VIEW "MGCCOP"."V_NURSE_GPA" ("PIDM", "QPS", "HOURS") AS 
+-- CREATE OR REPLACE FORCE VIEW "MGCCOP"."V_NURSE_GPA" ("PIDM", "QPS", "HOURS") AS 
 
 select all_courses.pidm, sum(all_courses.qps) qps, sum(all_courses.hours) hours
         
@@ -6,6 +6,7 @@ from MGCCOP.v_nurse_all_courses all_courses,
      ( select pidm, subj, cnum, 
               max(qps||term||decode(src, 'tran', '0', 'inst', '1') ) uniqifier
          from MGCCOP.v_nurse_all_courses
+        where expired is null or expired = 'N'
         group by pidm, subj, cnum ) bestest_courses
 
 where bestest_courses.pidm = all_courses.pidm
@@ -15,4 +16,4 @@ where bestest_courses.pidm = all_courses.pidm
                                     all_courses.term ||
                                     decode(all_courses.src, 'tran', '0', 'inst', '1') )
 
-group by all_courses.pidm
+group by all_courses.pidm;
