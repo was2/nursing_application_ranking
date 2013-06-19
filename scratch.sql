@@ -39,6 +39,7 @@ select
      shrtckg_credit_hours hours, shrtckg_grde_code_final,
      eqivs.subj_req, eqivs.cnum_req,
      case when (eligible_courses.max_age is not null
+                and eqivs.subj_req <> 'NUR'
                 and add_months(stvterm_end_date, eligible_courses.max_age) <= sysdate ) 
           then 'Y' else 'N' end expired,
      'inst' as src
@@ -53,6 +54,7 @@ from shrtckn, shrtckg, shrgrde, mgccop.nurse_applicants applicants,
 
 where
       shrtckn_pidm = applicants.pidm
+      and applicants.pidm = 125282
       -- and applicants.term = '201330'
       
       -- join to stvterm for course age restriction
@@ -101,6 +103,7 @@ from shrtrce, shrgrde, mgccop.nurse_applicants applicants,
 
 where
       shrtrce_pidm = applicants.pidm
+      and applicants.pidm = 125282
       
       and shrgrde.shrgrde_code = shrtrce_grde_code
 
@@ -116,4 +119,22 @@ where
       and eqivs.subj_eqiv = eligible_courses.subj
       and eqivs.cnum_eqiv = eligible_courses.cnum
       
-order by pidm
+order by pidm;
+
+------------------
+select all_courses.pidm, term, subj, cnum, all_courses.qps qps, all_courses.hours hours, expired, src
+        
+from MGCCOP.v_nurse_all_courses all_courses,
+     ( select pidm, subj, cnum, 
+              max(qps||term||decode(src, 'tran', '0', 'inst', '1') ) uniqifier
+         from MGCCOP.v_nurse_all_courses
+        where expired <> 'Y'
+        group by pidm, subj, cnum ) bestest_courses
+
+where all_courses.pidm = 125282--bestest_courses.pidm = all_courses.pidm
+  and bestest_courses.subj = all_courses.subj
+  and bestest_courses.cnum = all_courses.cnum
+  and bestest_courses.uniqifier = ( all_courses.qps ||
+                                    all_courses.term ||
+                                    decode(all_courses.src, 'tran', '0', 'inst', '1') )
+--group by all_courses.pidm;
