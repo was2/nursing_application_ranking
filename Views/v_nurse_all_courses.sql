@@ -8,9 +8,9 @@
 --transcript courses do not have useful term info, cant determine if courses are too old
 
 
--- CREATE OR REPLACE FORCE VIEW "MGCCOP"."V_NURSE_ALL_COURSES" ("PIDM", "TERM", "SUBJ", "CNUM", "QPS", "HOURS", "GRADE", "SUBJ_EQIV", "CNUM_EQIV", "EXPIRED", "SRC") AS 
+-- CREATE OR REPLACE FORCE VIEW "MGCCOP"."V_NURSE_ALL_COURSES" ("PIDM", "TERM", "CRN", "TRIT_SEQ", "TRAM_SEQ", "TRCE_SEQ", "SUBJ", "CNUM", "QPS", "HOURS", "GRADE", "SUBJ_EQIV", "CNUM_EQIV", "EXPIRED", "SRC") AS 
 select
-     shrtckn_pidm pidm, shrtckn_term_code term, 
+     shrtckn_pidm pidm, shrtckn_term_code term, shrtckn_crn, null as trit_seq, null as tram_seq, null as trce_seq, 
      shrtckn_subj_code subj, shrtckn_crse_numb cnum,
      shrgrde_quality_points * shrtckg_credit_hours qps,
      shrtckg_credit_hours hours, shrtckg_grde_code_final,
@@ -68,7 +68,7 @@ where
  union all
  
  select
-       shrtrce_pidm pidm, shrtrce_term_code_eff,
+       shrtrce_pidm pidm, shrtrce_term_code_eff, null as crn, shrtrce_trit_seq_no, shrtrce_tram_seq_no, shrtrce_seq_no,
        shrtrce_subj_code subj, shrtrce_crse_numb cnum, 
        shrgrde.shrgrde_quality_points * shrtrce.shrtrce_credit_hours,
        shrtrce_credit_hours, shrtrce_grde_code,
