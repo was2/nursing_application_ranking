@@ -34,7 +34,7 @@ from shrtckn, shrtckg, shrgrde, mgccop.nurse_applicants applicants,
 
 where
       shrtckn_pidm = applicants.pidm
-      -- and applicants.term = '201330'
+      -- and applicants.term <> '201330'
       
       -- join to stvterm for course age restriction
       and stvterm_code = shrtckn_term_code
